@@ -1,0 +1,15 @@
+.gitattributes
+
+index.php
+
+scss/styles.scss
+scss/_variables.scss
+
+css/styles.css
+css/min/styles.min.css
+
+js/scripts.js
+js/min/scripts.min.js
+
+*~
+prepros.cfg
