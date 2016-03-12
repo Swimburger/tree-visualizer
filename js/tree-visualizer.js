@@ -17,13 +17,7 @@
         zoomOpts, normalView, fsView, advanced;
 
     $.treeVisualizer = function(xml, options) {
-        var args = $.extend({
-            normalView: true,
-            fsView: true,
-            advanced: false,
-            fsBtn: "",
-            containerSS: "body"
-        }, options);
+        var args = $.extend({}, $.treeVisualizer.defaults, options);
 
         if ((args.normalView || args.fsView) && $(args.containerSS).length) {
             initVars(args);
@@ -71,7 +65,7 @@
                         treeInvestigator();
                         setSizeTreeFS();
                         tooltipPosition();
-                    } 
+                    }
                 });
 
                 // Make the fs-tree-visualizer tree responsive
@@ -115,6 +109,14 @@
                 "false, which does not make sense.");
         }
     }
+
+    $.treeVisualizer.defaults = {
+      normalView: true,
+      fsView: true,
+      advanced: false,
+      fsBtn: "",
+      containerSS: "body"
+    };
 
     function initVars(args) {
         $(args.containerSS).append('<div id="tv-error" style="display: none"><p></p></div>');
