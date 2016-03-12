@@ -71,8 +71,11 @@
                         treeInvestigator();
                         setSizeTreeFS();
                         tooltipPosition();
-                    }
+                    } 
                 });
+
+                // Make the fs-tree-visualizer tree responsive
+                window.onresize = setSizeTreeFS;
             }
             anyTree.on("click", "a", function(e) {
                 var $this = $(this),
@@ -106,8 +109,6 @@
                 tooltip.fadeOut(250);
                 treeLeafs.removeClass("hovered");
             });
-            // Make the fs-tree-visualizer tree responsive
-            window.onresize = setSizeTreeFS;
         } else {
             console.error("Cannot initialize Tree Visualizer: either the container " +
                 "does not exist, or you have set both normal and fullscreen view to " +
