@@ -1,7 +1,6 @@
 (function($) {
     $.treeVisualizer("xml/tekorten.xml", {
-        fsView: false,
-        containerSS: "#output" 
+        container: "#output"
     });
 
     $("noscript").remove();
