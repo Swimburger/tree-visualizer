@@ -10,8 +10,8 @@
         padding: 0;
     }
     button {
-        outline: 0;
         cursor: pointer;
+        outline: 0;
     }
     .tree {
         overflow: auto;
@@ -36,38 +36,34 @@
                 }
             }
             &:after {
-                content: "";
                 position: absolute;
+                bottom: -24px;
+                left: 50%;
                 width: 0;
                 height: 0;
+                margin-left: -24px;
+                content: "";
                 transform: rotate(-45deg);
                 transform-origin: 0 0;
                 border: 12px solid;
-                bottom: -24px;
-                left: 50%;
-                margin-left: -24px;
                 border-color: transparent transparent white white;
                 box-shadow: -6px 6px 6px -2px rgba(0,0,0,0.2);
             }
             button {
-                font: {
-                    weight: bold;
-                    size: 18px;
-                };
-                line-height: 1;
                 position: absolute;
                 top: 0;
                 right: 0;
-                width: 28px;
-                height: 28px;
-                transition: opacity 300ms;
+                width: 30px;
+                height: 30px;
+                transform: translate(50%, -50%);
                 text-align: center;
-                opacity: 0.4;
                 color: white;
                 border: 0;
+                border-radius: 50%;
                 background: $error;
+                font-size: 14px;
+                line-height: 1;
                 &:hover {
-                    opacity: 1;
                     background: darken($error, 4%);
                 }
                 &:active {
@@ -75,125 +71,17 @@
                 }
             }
         }
-        &.size-4 {
-            font-size: 8px;
-            ol,
-            li {
-                padding-top: 8px;
-            }
-            li:before,
-            li:after,
-            ol ol:before {
-                height: 8px;
-            }
-            li a {
-                padding: 2px 4px;
-            }
+        li:before,
+        li:after,
+        ol ol:before {
+            height: 1em !important;
         }
-        &.size-3 {
-            font-size: 10px;
-            ol,
-            li {
-                padding-top: 10px;
-            }
-            li:before,
-            li:after,
-            ol ol:before {
-                height: 10px;
-            }
-            li a {
-                padding: 2px 6px;
-            }
+        ol,
+        li {
+            padding-top: 1em !important;
         }
-        &.size-2 {
-            font-size: 12px;
-            li,
-            ol {
-                padding-top: 12px;
-            }
-            li:before,
-            li:after,
-            ol ol:before {
-                height: 12px;
-            }
-            li a {
-                padding: 4px 8px;
-            }
-        }
-        &.size-1 {
-            font-size: 14px;
-            li,
-            ol {
-                padding-top: 14px;
-            }
-            li:before,
-            li:after,
-            ol ol:before {
-                height: 14px;
-            }
-            li a {
-                padding: 6px 10px;
-            }
-        }
-        &.size0 {
-            font-size: 16px;
-            li,
-            ol {
-                padding-top: 16px;
-            }
-            li:before,
-            li:after,
-            ol ol:before {
-                height: 16px;
-            }
-            li a {
-                padding: 8px 12px;
-            }
-        }
-        &.size1 {
-            font-size: 18px;
-            li,
-            ol {
-                padding-top: 18px;
-            }
-            li:before,
-            li:after,
-            ol ol:before {
-                height: 18px;
-            }
-            li a {
-                padding: 10px 12px;
-            }
-        }
-        &.size2 {
-            font-size: 20px;
-            li,
-            ol {
-                padding-top: 20px;
-            }
-            li:before,
-            li:after,
-            ol ol:before {
-                height: 20px;
-            }
-            li a {
-                padding: 12px 24px;
-            }
-        }
-        &.size3 {
-            font-size: 24px;
-            li,
-            ol {
-                padding-top: 24px;
-            }
-            li:before,
-            li:after,
-            ol ol:before {
-                height: 24px;
-            }
-            li a {
-                padding: 12px 24px;
-            }
+        li a {
+            padding: 0.3em 0.6em !important;
         }
         ol {
             position: relative;
@@ -275,6 +163,7 @@
                     border-bottom-width: 2px;
                     background: $tree_highlight;
                     box-shadow: none;
+                font-weight: normal;
                 }
                 &:hover + ol li a.only-child {
                     border: 1px solid darken($tree_highlight,15%);
@@ -291,9 +180,9 @@
                     }
                 }
                 &.only-child {
-                    font-weight: bold;
+                    margin-bottom: 0.25em;
                     color: $tree_highlight;
-                    margin-bottom: 4px;
+                    font-weight: bold;
                     &:hover,
                     &.hovered {
                         color: white;
@@ -314,19 +203,19 @@
 #tree-visualizer {
     .tree {
         min-height: 240px;
-        font-size: 12px;
         margin: 24px auto;
         padding: 24px;
         border: 6px solid white;
         background: darken(whiteSmoke, 2%);
+        font-size: 12px;
         + .tooltip {
             font-size: 12px;
         }
     }
     .show-tv {
-        @extend %button;
         display: block;
         margin: 24px auto;
+        @extend %button;
     }
 }
 #fs-tree-visualizer {
@@ -348,13 +237,10 @@
     .zoom-opts {
         position: absolute;
         z-index: 12;
-        top: 0;
-        right: 0;
+        top: 12px;
+        right: 12px;
         padding: 12px;
         background: whiteSmoke;
-        z-index: 12;
-        border-bottom: 6px solid white;
-        border-left: 6px solid white;
         @extend %clearfix;
         button {
             position: relative;
@@ -365,7 +251,6 @@
             padding: 0;
             @extend %button;
             &.close {
-                line-height: 1;
                 width: 34px;
                 height: 34px;
                 margin-right: 0;
@@ -376,6 +261,7 @@
                 border-radius: 50%;
                 background: transparent;
                 text-shadow: none;
+                line-height: 1;
                 &:hover {
                     color: white;
                     background: $error;
@@ -392,22 +278,22 @@
                 border-radius: 0;
             }
             &:first-child {
-                border-radius: 4em 0 0 4em;
+                border-radius: 3px 0 0 3px;
             }
             &:nth-child(3) {
-                border-radius: 0 4em 4em 0;
+                border-radius: 0 3px 3px 0;
             }
         }
     }
 }
 #tv-error {
     margin-top: 24px;
-    text-align: center;
-    background: $error;
-    line-height: 1.75;
     padding: 8px 16px;
+    text-align: center;
     color: white;
+    background: $error;
     text-shadow: 0 1px rgba(0,0,0,0.32);
+    line-height: 1.75;
     p {
         margin: 0;
     }
