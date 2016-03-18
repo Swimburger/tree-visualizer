@@ -37,6 +37,10 @@
     <h1>HTML Tree Parser for Alpino <sup>beta</sup></h1>
   </header>
     <section id="output">
+        <a href="xml/ambitie.xml">ambitie</a>
+        <a href="xml/empty.xml">empty</a>
+        <a href="xml/tekorten.xml">tekorten</a>
+        <a href="xml/huge.xml">huge</a>
     </section>
     <!-- /#output -->
 

@@ -6,12 +6,21 @@ import random
 import sys
 import time
 
+from clam.common.data import CLAMMetaData
+
+class AlpinoXMLCollection(CLAMMetaData):
+    attributes = {}
+    name = "Alpino XML Collection"
+    mimetype = 'application/zip'
+    scheme = ''
+
+
 #create client, connect to server.
 #the latter two arguments are required for authenticated webservices, they can be omitted otherwise
 
 clamclient = clam.common.client.CLAMClient("http://webservices-lst.science.ru.nl/alpino", "BramVanroy", "DuneA91Dan")
 
-
+clamclient.register_custom_formats([ AlpinoXMLCollection ])
 
 #Set a project name (it is recommended to include a sufficiently random naming component here, to allow for concurrent uses of the same client)
 
@@ -35,7 +44,7 @@ data = clamclient.get(project)
 #	The following parameters may be specified for this input template:
 #		encoding=...  #(StaticParameter) -   Encoding -  The character encoding of the file
 
-clamclient.addinputfile(project, data.inputtemplate("untokinput"), "alpino-request-file.txt")
+clamclient.addinputfile(project, data.inputtemplate("untokinput"), "C:/xampp/htdocs/bramvanroy/projects/tree-visualizer/alpino-request-file.txt")
 
 
 #Start project execution with custom parameters. Parameters are specified as Python keyword arguments to the start() method (parameterid=value)
@@ -46,11 +55,11 @@ data = clamclient.start(project)
 #Always check for parameter errors! Don't just assume everything went well! Use startsafe() instead of start
 #to simply raise exceptions on parameter errors.
 if data.errors:
-    print >>sys.stderr,"An error occured: " + data.errormsg
+    print("An error occured: " + data.errormsg, file=sys.stderr)
     for parametergroup, paramlist in data.parameters:
         for parameter in paramlist:
             if parameter.error:
-                print >>sys.stderr,"Error in parameter " + parameter.id + ": " + parameter.error
+                print("Error in parameter " + parameter.id + ": " + parameter.error, file=sys.stderr)
     clamclient.delete(project) #delete our project (remember, it was temporary, otherwise clients would leave a mess)
     sys.exit(1)
 
@@ -58,7 +67,7 @@ if data.errors:
 while data.status != clam.common.status.DONE:
     time.sleep(5) #wait 5 seconds before polling status
     data = clamclient.get(project) #get status again
-    print >>sys.stderr, "\tRunning: " + str(data.completion) + '% -- ' + data.statusmessage
+    print("\tRunning: " + str(data.completion) + '% -- ' + data.statusmessage, file=sys.stderr)
 
 #Iterate over output files
 for outputfile in data.output:
@@ -77,12 +86,8 @@ for outputfile in data.output:
 	#if outputtemplate == "foliaoutput": #FoLiA XML Output (FoLiAXMLFormat)
 	#Download the remote file
 
-    outputfile.copy("alpino-output.txt")
+    outputfile.copy("alpino-output.xml")
     
-    
-	#..or iterate over its (textual) contents one line at a time:
-    for line in outputfile.readlines():
-        print(line)
 
 #delete the project (otherwise it would remain on server and clients would leave a mess)
 
