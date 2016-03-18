@@ -24,9 +24,9 @@
             initVars(args);
             loadXML(xml);
             // Show fs-tree-visualizer tree
-            $(".show-tv").click(function(e) {
+            $(".tv-show-fs").click(function(e) {
                 anyTooltip.css("top", "-100%").children("ul").empty();
-                treeSS.find("a").removeClass("hovered");
+                if (typeof treeSS != "undefined") treeSS.find("a").removeClass("hovered");
 
                 noMoreZooming();
                 fontSizeTreeFS();
@@ -134,7 +134,7 @@
                 '<aside class="tooltip" style="display: none"><ul></ul>' +
                 '<button>&#10005;</button></aside>';
             if (args.fsView) {
-                SSHTML += '<button class="show-tv">Fullscreen</button>';
+                SSHTML += '<button class="tv-show-fs">Fullscreen</button>';
             }
             SS.append(SSHTML);
 
@@ -163,7 +163,7 @@
         advanced = args.advanced;
 
         if (args.fsBtn != "") {
-            $(args.fsBtn).addClass("show-tv");
+            $(args.fsBtn).addClass("tv-show-fs");
         }
 
         anyTree = $(trees.join());
@@ -178,7 +178,7 @@
             })
             .done(function(data) {
                 if (data == null) {
-                    errorHandle("Your XML appears to be empty.");
+                    errorHandle("Your XML appears to be empty or not in a compatible format.");
                 } else {
                     parseXMLObj(data);
                 }
@@ -209,16 +209,13 @@
         var newList = $("<ol/>");
 
         nodes.each(function(x, e) {
-            var newItem = $('<li><a href="#">&nbsp;</a></li>');
+            var newItem = $('<li><a href="#"></a></li>');
 
             for (var i = 0, l = e.attributes.length, a = null; i < l; i++) {
                 // Don't forget to add properties as data-attributes
                 a = e.attributes[i];
                 // Some data-attributes have initial spaces. Get rid of them
                 newItem.attr("data-" + a.nodeName, a.value.replace(/^\s(.+)/g, "$1"));
-                if (a.nodeName == "cat" || a.nodeName == "word") {
-                    newItem.html('<a href="#">' + a.value + '</a>');
-                }
             }
             if ($(this).children("node").length) {
                 newItem.append(buildOutputList($(this).children("node")));
@@ -230,20 +227,29 @@
 
     // Small modifications to the tree
     function treeModifier() {
-        anyTree.find("a:only-child").each(function() {
+        anyTree.find("a").each(function() {
             var $this = $(this),
                 li = $this.parent("li");
 
-            if (($this.next().length === 0) && $this.html() === "&nbsp;") {
-                if (li.data("rel")) $this.html("<em>" + li.data("rel") + "</em>");
-            } else {
-
-                if (li.data("rel")) li.append("<span><em>" + li.data("rel") + "</em></span>");
+            if (li.data("rel")) {
+                $this.append("<span>"+li.data("rel")+"<span>");
+                if (li.data("index")) $this.append("<span>"+li.data("index")+"</span>");
             }
-            if (li.data("pt")) li.append("<span>" + li.data("pt") + "</span>");
-            if (li.data("lemma")) li.append("<span>" + li.data("lemma") + "</span>");
+            if (li.data("pt"))  {
+                if (li.data("index")) $this.children("span:last-child").append(":"+li.data("pt"));
+                else $this.append("<span>" + li.data("pt") + "</span>");
+            }
+            else if (li.data("cat")) {
+                if (li.data("index")) $this.children("span:last-child").append(":"+li.data("cat"));
+                else $this.append("<span>" + li.data("cat") + "</span>");
+            }
 
-            // addClass because after appending new children, it isn't the
+            if ($this.is(":only-child")) {
+                if (li.data("lemma")) li.append("<span>" + li.data("lemma") + "</span>");
+                if (li.data("word")) li.append("<span><em>" + li.data("word") + "</em></span>");
+            }
+
+            // addClass because after appending new children, it isn't necessarily the
             // only child any longer
             $this.addClass("only-child");
         });
@@ -283,31 +289,32 @@
             var tooltip = tree.next(".tooltip"),
                 targetOffset = targetLink.offset(),
                 treeOffset = tree.offset(),
-                window = $(window),
+                win = $(window),
                 linkV = {
                     top: targetOffset.top,
-                    right: window.outerWidth() - (targetOffset.left + targetLink.outerWidth()),
-                    bottom: window.outerHeight() - (targetOffset.top + targetLink.outerHeight()),
+                    right: win.outerWidth() - (targetOffset.left + targetLink.outerWidth()),
+                    bottom: win.outerHeight() - (targetOffset.top + targetLink.outerHeight()),
                     left: targetOffset.left,
                     w: targetLink.outerWidth(),
                     h: targetLink.outerHeight()
                 },
                 treeV = {
                     top: treeOffset.top,
-                    right: window.outerWidth() - (treeOffset.left + tree.outerWidth()),
-                    bottom: window.outerHeight() - (treeOffset.top + tree.outerHeight()),
+                    right: win.outerWidth() - (treeOffset.left + tree.outerWidth()),
+                    bottom: win.outerHeight() - (treeOffset.top + tree.outerHeight()),
                     left: treeOffset.left,
                     w: tree.outerWidth(),
                     h: tree.outerHeight()
                 };
             tooltip.css({
                 "left": parseInt(linkV.left + (linkV.w / 2) - (tooltip.outerWidth() / 2) + 7.5, 10),
-                "top": parseInt(linkV.top - tooltip.outerHeight() - 24, 10)
+                "top": parseInt(linkV.top - tooltip.outerHeight() - 24, 10) - win.scrollTop()
             });
+            console.log(win.scrollTop());
 
             if (((linkV.left + (linkV.w / 2)) < treeV.left) ||
                 ((linkV.right + (linkV.w / 2)) < treeV.right) ||
-                ((linkV.top - (linkV.h / 2)) < treeV.top) ||
+                ((linkV.top + (linkV.h/2)) < treeV.top) ||
                 ((linkV.bottom + linkV.h) < treeV.bottom)) {
                 tooltip.fadeOut(400);
             }
@@ -345,14 +352,14 @@
         errorContainer.children("p").text(message).parent().fadeIn(250);
         if (normalView) {
             treeSS.scrollLeft(0);
-            SS.find(".show-tv").prop("disabled", true);
+            SS.find(".tv-show-fs").prop("disabled", true);
         }
     }
 
     function removeError() {
         errorContainer.hide();
         if (normalView) {
-            SS.find(".show-tv").prop("disabled", false);
+            SS.find(".tv-show-fs").prop("disabled", false);
         }
     }
 }(jQuery));
