@@ -39,7 +39,7 @@
                 fontSizeTreeFS();
 
                 FS.show();
-                setTimeout(function(){
+                setTimeout(function() {
                     sizeTreeFS();
                 }, 300);
                 e.preventDefault();
@@ -126,8 +126,7 @@
 
 
     function initVars(args) {
-        $(args.container).append('<div id="tv-error" style="display: none"><p></p></div>');
-        errorContainer = $("#tv-error");
+        errorContainer = $(".tv-error");
         var trees = [],
             tooltips = [];
 
@@ -135,7 +134,8 @@
             normalView = true;
             $(args.container).append('<div id="tree-visualizer" style="display: none"></div>');
             SS = $("#tree-visualizer");
-            var SSHTML = '<div class="tree" style="font-size: ' + args.fontSize + 'px;"></div>' +
+            var SSHTML = '<div class="tv-error" style="display: none"><p></p></div>' +
+                '<div class="tree" style="font-size: ' + args.fontSize + 'px;"></div>' +
                 '<aside class="tooltip" style="display: none"><ul></ul>' +
                 '<button>&#10005;</button></aside>';
             if (args.fsView) {
@@ -151,9 +151,10 @@
         }
         if (args.fsView) {
             fsView = true;
-            $("body").append('<div id="fs-tree-visualizer" style="display: none"></div>');
+            $("body").append('<div id="fs-tree-visualizer-" class=""fs-tree-visualizer" style="display: none"></div>');
             FS = $("#fs-tree-visualizer");
-            var FSHTML = '<div class="tree"></div><aside class="tooltip" style="display: none"><ul></ul>' +
+            var FSHTML = '<div class="tv-error" style="display: none"><p></p></div>' +
+                '<div class="tree"></div><aside class="tooltip" style="display: none"><ul></ul>' +
                 '<button>&#10005;</button></aside><div class="zoom-opts"><button class="zoom-out">-</button>' +
                 '<button class="zoom-default">Default</button><button class="zoom-in">+</button>' +
                 '<button class="close">&#10005;</button></div>';
@@ -190,7 +191,23 @@
                 }
             })
             .fail(function(jqXHR, textStatus, errorThrown) {
-                errorHandle(textStatus + ": " + errorThrown);
+                var msg = '';
+                if (jqXHR.status === 0) {
+                    msg = 'Not connect.\n Verify Network.';
+                } else if (jqXHR.status == 404) {
+                    msg = 'Requested page not found. [404]';
+                } else if (jqXHR.status == 500) {
+                    msg = 'Internal Server Error [500].';
+                } else if (exception === 'parsererror') {
+                    msg = 'Requested parse failed.';
+                } else if (exception === 'timeout') {
+                    msg = 'Time out error.';
+                } else if (exception === 'abort') {
+                    msg = 'Ajax request aborted.';
+                } else {
+                    msg = 'Uncaught Error.\n' + jqXHR.responseText;
+                }
+                errorHandle(msg);
             });
     }
 

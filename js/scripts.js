@@ -11,7 +11,7 @@
 
     // When you want to display both fullscreen and
     // normal view. container is where you want the normal view to be
-    $.treeVisualizer("xml/ambitie.xml", {
+    $.treeVisualizer("xml/huge.xml", {
         container: "#output"
     });
 
