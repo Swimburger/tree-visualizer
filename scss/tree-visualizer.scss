@@ -1,6 +1,13 @@
+/**
+ * (S)CSS file for the Tree Visualizer. You can change the colours of the
+ * tree in _tv-variables.scss.
+ *
+ * @author Bram Vanroy
+ */
 @import "tv-variables";
 @import "tv-buttons";
 @import "clearfix";
+
 #tree-visualizer-fs,
 #tree-visualizer {
     box-sizing: border-box;
@@ -209,7 +216,6 @@
     .tv-show-fs {
         display: block;
         margin: 24px auto;
-
         @extend %button;
     }
 }
@@ -225,7 +231,7 @@
     background: rgba(0,0,0,0.6);
     .tree {
         position: relative;
-        z-index: 11;
+        z-index: 11;
         padding: 12px;
         min-width: 480px;
         min-height: 180px;
@@ -240,11 +246,10 @@
         background: whiteSmoke;
         opacity: 0.7;
         transition: all 200ms;
-
         @extend %clearfix;
         &:hover {
             z-index: 12;
-            box-shadow: 0 2px 4px rgba(0,0,0,.3);
+            box-shadow: 0 2px 4px rgba(0,0,0,.3);
             opacity: 1;
         }
         button {
@@ -254,7 +259,6 @@
             padding: 0;
             width: 36px;
             height: 36px;
-
             @extend %button;
             &.close {
                 margin-right: 0;

@@ -2,6 +2,11 @@
  * jQuery "plug-in" (not really) to convert an XML tree structure into a
  * plug-and-play HTML tree that allows user interaction.
  *
+ * New releases will include goodies such as multiple instances, better variable
+ * control, more safety nets and warnings, event control, and more.
+ *
+ * https://github.com/BramVanroy/tree-visualizer
+ *
  * @version 0.1
  * @license MIT
  * @author Bram Vanroy

@@ -1,3 +1,9 @@
+/**
+ * (S)CSS file for the Tree Visualizer. You can change the colours of the
+ * tree in _tv-variables.scss.
+ *
+ * @author Bram Vanroy
+ */
 #tree-visualizer .tv-show-fs, #tree-visualizer-fs .zoom-opts button {
   font-weight: bold;
   padding: 12px 16px 10px;
