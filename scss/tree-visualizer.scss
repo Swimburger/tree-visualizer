@@ -1,7 +1,7 @@
 @import "tv-variables";
 @import "tv-buttons";
 @import "clearfix";
-#fs-tree-visualizer,
+#tree-visualizer-fs,
 #tree-visualizer {
     box-sizing: border-box;
     color: $text_main;
@@ -213,7 +213,7 @@
         @extend %button;
     }
 }
-#fs-tree-visualizer {
+#tree-visualizer-fs {
     position: fixed;
     top: 0;
     left: 0;

@@ -1,10 +1,11 @@
 (function($) {
     // Only fullscreen. Links ending in .xml will automatically
     // open in a fullscreen representation
-    $('a[href$="xml"]').addClass("tv-show-fs").click(function(e) {
-        $("#tree-visualizer, #fs-tree-visualizer, #tv-error").remove();
+    $('a[href$="xml"]').click(function(e) {
+        $("#tree-visualizer, #tree-visualizer-fs").remove();
         $.treeVisualizer($(this).attr("href"), {
-            normalView: false
+            normalView: false,
+            initFSOnClick: true
         });
         e.preventDefault();
     });

@@ -8,13 +8,12 @@
  */
 
 (function($) {
-    var fontSizes = [8, 10, 12, 14, 16, 20];
     var zoomCounter,
         FS, SS,
         treeFS, treeSS, tooltipFS, tooltipSS,
         anyTree,
         anyTooltip,
-        zoomOpts, normalView, fsView, advanced;
+        zoomOpts, normalView, fsView, fontSizes, initFSOnClick;
 
     $.treeVisualizer = function(xml, options) {
         var args = $.extend({}, $.treeVisualizer.defaults, options);
@@ -22,7 +21,6 @@
         if (args.normalView || args.fsView) {
             initVars(args);
             loadXML(xml);
-
         } else {
             console.error("Cannot initialize Tree Visualizer: either the container " +
                 "does not exist, or you have set both normal and fullscreen view to " +
@@ -30,21 +28,27 @@
         }
 
         $(document).ready(function() {
-            // Show fs-tree-visualizer tree
-            $(".tv-show-fs").click(function(e) {
-                anyTooltip.css("top", "-100%").children("ul").empty();
-                if (typeof treeSS != "undefined") treeSS.find("a").removeClass("hovered");
-
+            if (initFSOnClick) {
+                FS.fadeIn();
                 noMoreZooming();
                 fontSizeTreeFS();
-
-                FS.show();
                 setTimeout(function() {
                     sizeTreeFS();
-                }, 300);
-                e.preventDefault();
-            });
+                }, 10);
+            } else {
+                // Show tree-visualizer-fs tree
+                $(".tv-show-fs").click(function(e) {
+                    anyTooltip.css("top", "-100%").children("ul").empty();
+                    if (typeof treeSS != "undefined") treeSS.find("a").removeClass("hovered");
 
+                    noMoreZooming();
+                    fontSizeTreeFS();
+
+                    FS.show();
+                    sizeTreeFS();
+                    e.preventDefault();
+                });
+            }
             // Adjust scroll position
             anyTree.scroll(function() {
                 tooltipPosition();
@@ -77,7 +81,7 @@
                 }
             });
 
-            // Make the fs-tree-visualizer tree responsive
+            // Make the tree-visualizer-fs tree responsive
             if (fsView) $(window).on("resize", sizeTreeFS);
 
             anyTree.on("click", "a", function(e) {
@@ -118,15 +122,18 @@
     $.treeVisualizer.defaults = {
         normalView: true,
         fsView: true,
-        advanced: false,
         fontSize: 12,
         fsBtn: "",
+        fsFontSizes: [8, 10, 12, 14, 16, 20],
+        initFSOnClick: false,
         container: "body"
     };
 
 
     function initVars(args) {
         errorContainer = $(".tv-error");
+        fontSizes = args.fsFontSizes;
+        initFSOnClick = args.initFSOnClick;
         var trees = [],
             tooltips = [];
 
@@ -151,8 +158,8 @@
         }
         if (args.fsView) {
             fsView = true;
-            $("body").append('<div id="fs-tree-visualizer-" class=""fs-tree-visualizer" style="display: none"></div>');
-            FS = $("#fs-tree-visualizer");
+            $("body").append('<div id="tree-visualizer-fs" style="display: none"></div>');
+            FS = $("#tree-visualizer-fs");
             var FSHTML = '<div class="tv-error" style="display: none"><p></p></div>' +
                 '<div class="tree"></div><aside class="tooltip" style="display: none"><ul></ul>' +
                 '<button>&#10005;</button></aside><div class="zoom-opts"><button class="zoom-out">-</button>' +
@@ -164,8 +171,8 @@
             zoomOpts = FS.find(".zoom-opts");
             zoomCounter = Math.round(fontSizes.length / 2);
 
-            trees.push("#fs-tree-visualizer .tree");
-            tooltips.push("#fs-tree-visualizer .tooltip");
+            trees.push("#tree-visualizer-fs .tree");
+            tooltips.push("#tree-visualizer-fs .tooltip");
         }
         advanced = args.advanced;
 
@@ -345,7 +352,7 @@
         }
     }
 
-    /* Set width of the fs-tree-visualizer elements
+    /* Set width of the tree-visualizer-fs elements
     Can't be done in CSS without losing other functionality
     */
     function sizeTreeFS() {
