@@ -3,7 +3,8 @@
  * plug-and-play HTML tree that allows user interaction.
  *
  * New releases will include goodies such as multiple instances, better variable
- * control, more safety nets and warnings, event control, and more.
+ * control, more safety nets and warnings, event control, smart tooltip
+ * positioning and more.
  *
  * https://github.com/BramVanroy/tree-visualizer
  *
