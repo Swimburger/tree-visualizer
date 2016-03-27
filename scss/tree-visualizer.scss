@@ -1,16 +1,24 @@
+/**
+ * (S)CSS file for the Tree Visualizer. You can change the colours of the
+ * tree in _tv-variables.scss.
+ *
+ * @author Bram Vanroy
+ */
 @import "tv-variables";
 @import "tv-buttons";
 @import "clearfix";
-#fs-tree-visualizer,
+
+#tree-visualizer-fs,
 #tree-visualizer {
     box-sizing: border-box;
+    color: $text_main;
     * {
         box-sizing: border-box;
         margin: 0;
         padding: 0;
     }
     button {
-        outline: 0;
+        outline: 0;
         cursor: pointer;
     }
     .tree {
@@ -23,7 +31,7 @@
             z-index: 11;
             padding: 12px;
             border: 6px solid white;
-            background: darken(whiteSmoke, 2%);
+            background: darken(#F5F5F5, 2%);
             box-shadow: 0 2px 8px rgba(0,0,0,0.4);
             > ul {
                 padding: 0 8px;
@@ -62,9 +70,11 @@
                 text-align: center;
                 font-size: 14px;
                 line-height: 1;
+                transition: transform 200ms;
                 transform: translate(50%, -50%);
                 &:hover {
                     background: darken($error, 4%);
+                    transform: translate(50%, -50%) scale(1.23);
                 }
                 &:active {
                     background: darken($error, 8%);
@@ -140,7 +150,8 @@
                 background: white;
                 color: #666;
                 text-decoration: none;
-                em {
+                span:nth-child(2) {
+                    color: $text_main;
                     font-weight: normal;
                 }
                 &:hover,
@@ -148,7 +159,12 @@
                 &.hovered {
                     border: 1px solid $tree_highlight;
                     border-bottom-width: 2px;
-                    background: $tree_highlight;
+                    background: $tree_highlight;
+                    color: white;
+                }
+                &:hover span:nth-child(2),
+                &:hover + ol li a span:nth-child(2),
+                &.hovered span:nth-child(2) {
                     color: white;
                 }
                 &:hover + ol li a.only-child {
@@ -166,14 +182,13 @@
                     }
                 }
                 &.only-child {
-                    margin-bottom: 0.25em;
                     color: $tree_highlight;
                     font-weight: bold;
                     &:hover,
                     &.hovered {
                         border: 1px solid darken($tree_highlight,12%);
                         border-bottom-width: 2px;
-                        background: darken($tree_highlight,12%);
+                        background: darken($tree_highlight,12%);
                         color: white;
                         text-shadow: 0 1px 0 rgba(0,0,0,0.4);
                     }
@@ -189,23 +204,22 @@
 #tree-visualizer {
     .tree {
         margin: 24px auto;
-        padding: 24px;
+        padding: 24px;
         min-height: 240px;
         border: 6px solid white;
-        background: darken(whiteSmoke, 2%);
+        background: darken(#F5F5F5, 2%);
         font-size: 12px;
         + .tooltip {
             font-size: 12px;
         }
     }
-    .show-tv {
+    .tv-show-fs {
         display: block;
         margin: 24px auto;
-
         @extend %button;
     }
 }
-#fs-tree-visualizer {
+#tree-visualizer-fs {
     position: fixed;
     top: 0;
     left: 0;
@@ -216,20 +230,28 @@
     background: url("../img/ie8-bg-fix-black.png") repeat;
     background: rgba(0,0,0,0.6);
     .tree {
-        padding: 12px;
+        position: relative;
+        z-index: 11;
+        padding: 12px;
         min-width: 480px;
         min-height: 180px;
-        background: whiteSmoke;
+        background: #F5F5F5;
     }
     .zoom-opts {
         position: absolute;
         top: 12px;
         right: 12px;
-        z-index: 12;
+        z-index: 9;
         padding: 12px;
-        background: whiteSmoke;
-
+        background: #F5F5F5;
+        opacity: 0.7;
+        transition: all 200ms;
         @extend %clearfix;
+        &:hover {
+            z-index: 12;
+            box-shadow: 0 2px 4px rgba(0,0,0,.3);
+            opacity: 1;
+        }
         button {
             position: relative;
             float: left;
@@ -237,11 +259,10 @@
             padding: 0;
             width: 36px;
             height: 36px;
-
             @extend %button;
             &.close {
                 margin-right: 0;
-                margin-left: 12px;
+                margin-left: 12px;
                 width: 34px;
                 height: 34px;
                 border: 2px solid $error;
@@ -250,10 +271,11 @@
                 color: $error;
                 text-shadow: none;
                 line-height: 1;
-                transition: all 300ms;
+                transition: transform 200ms;
                 &:hover {
-                    background: $error;
+                    background: $error;
                     color: white;
+                    transform: scale(1.23);
                 }
                 &:active {
                     top: auto;
@@ -262,7 +284,7 @@
                 }
             }
             &.zoom-default {
-                padding: 0 8px;
+                padding: 0 8px;
                 width: auto;
                 border-radius: 0;
             }
