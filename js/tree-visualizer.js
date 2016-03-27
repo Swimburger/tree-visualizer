@@ -8,7 +8,8 @@
  */
 
 (function($) {
-    var zoomCounter = 0,
+    var fontSizes = [8, 10, 12, 14, 16, 20];
+    var zoomCounter = Math.round(fontSizes.length/2),
         FS, SS,
         errorContainer,
         treeFS, treeSS, tooltipFS, tooltipSS,
@@ -19,19 +20,19 @@
     $.treeVisualizer = function(xml, options) {
         var args = $.extend({}, $.treeVisualizer.defaults, options);
 
-        if ((args.normalView || args.fsView) && $(args.containerSS).length) {
+        if ((args.normalView || args.fsView) && $(args.container).length) {
             initVars(args);
             loadXML(xml);
             // Show fs-tree-visualizer tree
             $(".show-tv").click(function(e) {
                 anyTooltip.css("top", "-100%").children("ul").empty();
+                treeSS.find("a").removeClass("hovered");
 
-                zoomCounter = 0;
                 noMoreZooming();
-                treeInvestigator();
+                fontSizeTreeFS();
 
                 FS.fadeIn(250);
-                setSizeTreeFS();
+                sizeTreeFS();
                 e.preventDefault();
             });
 
@@ -59,17 +60,17 @@
                         } else if ($this.is(".zoom-out")) {
                             zoomCounter--;
                         } else if ($this.is(".zoom-default")) {
-                            zoomCounter = 0;
+                            zoomCounter = Math.round(fontSizes.length/2);
                         }
                         noMoreZooming();
-                        treeInvestigator();
-                        setSizeTreeFS();
+                        fontSizeTreeFS();
+                        sizeTreeFS();
                         tooltipPosition();
                     }
                 });
 
                 // Make the fs-tree-visualizer tree responsive
-                window.onresize = setSizeTreeFS;
+                window.onresize = sizeTreeFS;
             }
             anyTree.on("click", "a", function(e) {
                 var $this = $(this),
@@ -114,21 +115,23 @@
       normalView: true,
       fsView: true,
       advanced: false,
+      fontSize: 12,
       fsBtn: "",
-      containerSS: "body"
+      container: "body"
     };
 
     function initVars(args) {
-        $(args.containerSS).append('<div id="tv-error" style="display: none"><p></p></div>');
+        $(args.container).append('<div id="tv-error" style="display: none"><p></p></div>');
         errorContainer = $("#tv-error");
         var trees = [],
             tooltips = [];
 
         if (args.normalView) {
             normalView = true;
-            $(args.containerSS).append('<div id="tree-visualizer" style="display: none"></div>');
+            $(args.container).append('<div id="tree-visualizer" style="display: none"></div>');
             SS = $("#tree-visualizer");
-            var SSHTML = '<div class="tree"></div><aside class="tooltip" style="display: none"><ul></ul>' +
+            var SSHTML = '<div class="tree" style="font-size: ' + args.fontSize + 'px;"></div>' +
+                '<aside class="tooltip" style="display: none"><ul></ul>' +
                 '<button>&#10005;</button></aside>';
             if (args.fsView) {
                 SSHTML += '<button class="show-tv">Fullscreen</button>';
@@ -255,17 +258,17 @@
     }
 
     function noMoreZooming() {
-        if (zoomCounter > 2) {
+        if (zoomCounter >= fontSizes.length-1) {
             zoomOpts.find("button.zoom-in").prop("disabled", true);
-        } else if (zoomCounter < -3) {
+        } else if (zoomCounter <= 0) {
             zoomOpts.find("button.zoom-out").prop("disabled", true);
         } else {
             zoomOpts.find("button").prop("disabled", false);
         }
     }
 
-    function treeInvestigator() {
-        treeFS.attr("class", treeFS.attr("class").replace(/(size)-?\d/, "$1" + zoomCounter));
+    function fontSizeTreeFS() {
+        treeFS.css("fontSize",fontSizes[zoomCounter]+"px");
     }
 
     function tooltipPosition() {
@@ -306,7 +309,7 @@
                 ((linkV.right + (linkV.w / 2)) < treeV.right) ||
                 ((linkV.top - (linkV.h / 2)) < treeV.top) ||
                 ((linkV.bottom + linkV.h) < treeV.bottom)) {
-                tooltip.fadeOut("slow");
+                tooltip.fadeOut(400);
             }
             else {
                 tooltip.show();
@@ -317,7 +320,7 @@
     /* Set width of the fs-tree-visualizer elements
     Can't be done in CSS without losing other functionality
     */
-    function setSizeTreeFS() {
+    function sizeTreeFS() {
         var padR = parseInt(treeFS.css("paddingRight"), 10) || 0,
             padT = parseInt(treeFS.css("paddingTop"), 10) || 0,
             FSpadR = parseInt(FS.css("paddingRight"), 10) || 0,
