@@ -1,7 +1,6 @@
 (function($) {
     // Only fullscreen. Links ending in .xml will automatically
     // open in a fullscreen representation
-<<<<<<< HEAD
     var tvLink = $('a[href$="xml"]');
     tvLink.each(function (index) {
         $(this).attr("data-tv-url", $(this).attr("href"));
@@ -12,17 +11,11 @@
         window.history.replaceState("", document.title, window.location.pathname + window.location.search + $this.attr("href"));
         $("#tree-visualizer, #tree-visualizer-fs").remove();
         $.treeVisualizer($this.data("tv-url"), {
-=======
-    $('a[href$="xml"]').click(function(e) {
-        $("#tree-visualizer, #tree-visualizer-fs").remove();
-        $.treeVisualizer($(this).attr("href"), {
->>>>>>> origin/master
             normalView: false,
             initFSOnClick: true
         });
         e.preventDefault();
     });
-<<<<<<< HEAD
     var hash = window.location.hash;
     if (hash) {
         if (hash.indexOf("tv-") == 1) {
@@ -30,8 +23,6 @@
             tvLink.eq(index[0] - 1).click();
         }
     }
-=======
->>>>>>> origin/master
 
     // When you want to display both fullscreen and
     // normal view. container is where you want the normal view to be

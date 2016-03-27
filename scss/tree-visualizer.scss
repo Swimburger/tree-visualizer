@@ -21,6 +21,18 @@
         outline: 0;
         cursor: pointer;
     }
+    .tv-error {
+        margin-top: 24px;
+        padding: 8px 16px;
+        background: $error;
+        color: white;
+        text-align: center;
+        text-shadow: 0 1px rgba(0,0,0,0.32);
+        line-height: 1.75;
+        p {
+            margin: 0;
+        }
+    }
     .tree {
         overflow: auto;
         box-sizing: content-box;
@@ -243,11 +255,7 @@
         right: 12px;
         z-index: 9;
         padding: 12px;
-<<<<<<< HEAD
         background: #F5F5F5;
-=======
-        background: whiteSmoke;
->>>>>>> origin/master
         opacity: 0.7;
         transition: all 200ms;
         @extend %clearfix;
@@ -299,17 +307,5 @@
                 border-radius: 0 3px 3px 0;
             }
         }
-    }
-}
-#tv-error {
-    margin-top: 24px;
-    padding: 8px 16px;
-    background: $error;
-    color: white;
-    text-align: center;
-    text-shadow: 0 1px rgba(0,0,0,0.32);
-    line-height: 1.75;
-    p {
-        margin: 0;
     }
 }
