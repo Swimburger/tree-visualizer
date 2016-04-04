@@ -28,7 +28,7 @@
     }
 
     // Basic usage
-     $("#output").treeVisualizer('ambitie.xml');
+     $("#output").treeVisualizer('xml/ambitie.xml');
 
     $("noscript").remove();
 })(jQuery);

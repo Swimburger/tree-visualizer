@@ -43,7 +43,7 @@
         }
 
         $(document).ready(function() {
-            if (!initFSOnClick) {
+            if (!args.initFSOnClick) {
                 // Show tree-visualizer-fs tree
                 instance.find(".tv-show-fs").click(function(e) {
                     anyTooltip.css("top", "-100%").children("ul").empty();
@@ -107,7 +107,7 @@
             });
 
             // Make the tree-visualizer-fs tree responsive
-            if (fsView) $window.on("resize", sizeTreeFS);
+            if (args.fsView) $window.on("resize", sizeTreeFS);
 
             anyTree.on("click", "a", function(e) {
                 var $this = $(this),
@@ -205,8 +205,8 @@
                 $(args.fsBtn).addClass("tv-show-fs");
             }
 
-            anyTree = $(trees.join());
-            anyTooltip = $(tooltips.join());
+            anyTree = jqArrayToJqObject(trees);
+            anyTooltip = jqArrayToJqObject(tooltips);
         }
 
         function loadXML(src) {
@@ -438,7 +438,9 @@
         }
 
         function errorHandle(message) {
-            errorContainer.children("p").text(message).parent().fadeIn(250);
+            //errorContainer
+            //TODO: save errorContainer in parent scope so both functions can access it
+            instance.find('.tv-error').children("p").text(message).parent().fadeIn(250);
             if (args.normalView) {
                 treeSS.scrollLeft(0);
                 SS.find(".tv-show-fs").prop("disabled", true);
@@ -446,10 +448,15 @@
         }
 
         function removeError() {
-            errorContainer.hide();
+            //errorContainer
+            instance.find('.tv-error').hide();
             if (args.normalView) {
                 SS.find(".tv-show-fs").prop("disabled", false);
             }
+        }
+        function jqArrayToJqObject(arr){
+            //http://stackoverflow.com/a/11304274/2919731
+            return $($.map(arr, function(el){return el.get();}));
         }
     }
 }(jQuery));
