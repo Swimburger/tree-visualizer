@@ -36,12 +36,16 @@
   <header>
     <h1>HTML Tree Parser for Alpino <sup>beta</sup></h1>
   </header>
+ <nav>
+    <a href="xml/ambitie.xml">ambitie</a>
+    <a href="xml/empty.xml">empty</a>
+    <a href="xml/tekorten.xml">tekorten</a>
+    <a href="xml/huge.xml">huge</a>
+  </nav>
     <section id="output">
-        <a href="xml/ambitie.xml">ambitie</a>
-        <a href="xml/empty.xml">empty</a>
-        <a href="xml/tekorten.xml">tekorten</a>
-        <a href="xml/huge.xml">huge</a>
     </section>
+    <section id="output2">
+        </section>
     <!-- /#output -->
 
   <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
