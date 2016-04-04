@@ -1,20 +1,34 @@
 (function($) {
-    // Only fullscreen. Links ending in .xml will automatically
-    // open in a fullscreen representation
-    $('a[href$="xml"]').click(function(e) {
-        $("#tree-visualizer, #tree-visualizer-fs").remove();
-        $.treeVisualizer($(this).attr("href"), {
+    // Open tree visualizer in fullscreen on click,
+    // change url accordingly and open FS if hash has tv-*
+    var tvLink = $("a.match");
+
+    tvLink.each(function (index) {
+        $(this).attr("data-tv-url", $(this).attr("href"));
+        $(this).attr("href", "#tv-" + (index + 1));
+    });
+    tvLink.click(function (e) {
+        var $this = $(this),
+        sent = encodeURI($this.parent("td").next("td").html());
+
+        window.history.replaceState("", document.title, window.location.pathname + window.location.search + $this.attr("href"));
+        $("body").treeVisualizer($this.data("tv-url"), {
             normalView: false,
-            initFSOnClick: true
+            initFSOnClick: true,
+            sentence: sent
         });
         e.preventDefault();
     });
+    var hash = window.location.hash;
+    if (hash) {
+        if (hash.indexOf("tv-") == 1) {
+            var index = hash.match(/\d+$/);
+            tvLink.eq(index[0] - 1).click();
+        }
+    }
 
-    // When you want to display both fullscreen and
-    // normal view. container is where you want the normal view to be
-    $.treeVisualizer("xml/huge.xml", {
-        container: "#output"
-    });
+    // Basic usage
+     $("#output").treeVisualizer('ambitie.xml');
 
     $("noscript").remove();
 })(jQuery);
